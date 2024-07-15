@@ -1,15 +1,29 @@
 #include <stdio.h>
+#include <stdlib.h>
 #include "Screen.h"
 
 extern int width;
 extern int height;
 
+extern int **matrix;
+
 void printScreen()
 {
-    printf("Printing Screen %dx%d...\n", width, height);
+    for(int x = 0 ; x < width ; x++)
+    {
+        for(int y = 0 ; y < width ; y++)
+        {
+            printf("%c", matrix[x][y] ? '*' : ' ');
+        }
+        printf("\n");
+    }
 }
 
-void updateScreen()
+void clearScreen()
 {
-    printf("Updating Screen...\n");
+    if(system("clear"))
+    {
+        printf("Error cleaning screen!");
+        exit(EXIT_FAILURE);
+    }
 }

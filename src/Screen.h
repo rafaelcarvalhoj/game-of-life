@@ -3,6 +3,6 @@
 
 void printScreen();
 
-void updateScreen();
+void clearScreen();
 
 #endif
