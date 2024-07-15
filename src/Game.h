@@ -1,10 +1,16 @@
 #ifndef GAME_H
 #define GAME_H
 
-void allocMap(int **matrix, int width, int height);
+int **allocMap();
 
-void freeMap(int **matrix, int width);
+void freeMap(int **map);
 
-void updateMap(int **matrix);
+int countLiveAdj(int x, int y);
 
-#endif
+void nextStateCell(int **newMatrix, int x, int y, int adjCount);
+
+int sameState(int **matrix1, int **matrix2);
+
+void updateMap();
+
+#endif // GAME_H
