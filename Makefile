@@ -10,7 +10,7 @@ OBJS = $(patsubst $(SRC_DIR)/%.c, $(OBJ_DIR)/%.o, $(SRCS))
 all: $(TARGET)
 
 $(TARGET): $(OBJS) main.o
-	$(CC) $(CFLAGS) -o $(TARGET) $(OBJS) main.o
+	$(CC) $(CFLAGS) -o $(TARGET) $(OBJS) main.o -lncurses
 
 main.o: main.c
 	$(CC) $(CFLAGS) -c main.c

@@ -1,29 +1,38 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <curses.h>
 #include "Screen.h"
 
-extern int width;
-extern int height;
+int width;
+int height;
 
 extern int **matrix;
 
-void printScreen()
-{
-    for(int x = 0 ; x < width ; x++)
-    {
-        for(int y = 0 ; y < width ; y++)
-        {
-            printf("%c", matrix[x][y] ? '*' : ' ');
-        }
-        printf("\n");
+void init_dimensions() {
+    initscr();
+    noecho();
+    curs_set(FALSE);
+
+    getmaxyx(stdscr, height, width);
+
+    if (width == 0 || height == 0) {
+        fprintf(stderr, "Error initializing width and height\n");
+        endwin();
+        exit(1);
     }
 }
 
-void clearScreen()
+
+void printScreen()
 {
-    if(system("clear"))
+    clear();
+    for(int y = 0 ; y < height ; y++)
     {
-        printf("Error cleaning screen!");
-        exit(EXIT_FAILURE);
+        for(int x = 0 ; x < width ; x++)
+        {
+            mvprintw(y, x, "%c", matrix[x][y] ? '*' : ' ');
+        }
     }
+    refresh();
 }
+

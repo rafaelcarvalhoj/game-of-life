@@ -1,22 +1,24 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
+#include <curses.h>
 #include "src/Screen.h"
 #include "src/Game.h"
 
-const int width = 20;
-const int height = 20;
 extern int **matrix;
 
 int main(int argc, char **argv)
 {
+    init_dimensions();
+
     matrix = allocMap();
-    printf("Game of life...\n");
+
+    printw("Game of life...\nPress any key to start.");
+    getch();
     while(1)
     {
         printScreen();
         usleep(99999);
-        clearScreen();
         updateMap();
     }
     return 0;

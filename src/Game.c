@@ -1,5 +1,6 @@
 #include <stdlib.h>
 #include <stdio.h>
+#include <curses.h>
 #include "Game.h"
 #include "Screen.h"
 
@@ -13,7 +14,8 @@ int **allocMap()
 
     if (newMatrix == NULL)
     {
-        printf("Error");
+        endwin();
+        fprintf(stderr, "Error initializing matrix\n");
         exit(EXIT_FAILURE);
     }
 
@@ -22,7 +24,8 @@ int **allocMap()
         newMatrix[i] = (int *)calloc(height, sizeof(int));
         if (newMatrix[i] == NULL)
         {
-            printf("Error");
+            endwin();
+            fprintf(stderr, "Error initializing matrix\n");
             exit(EXIT_FAILURE);
         }
     }
@@ -55,7 +58,7 @@ int countLiveAdj(int x, int y)
     return adjLive;
 }
 
-void nextStateCell(int **newMatrix, int x, int y, int adjCount)
+void nextStateCell(int **newMatrix, int y, int x, int adjCount)
 {
     /* Next State Rules
        1. Any live cell with fewer than two live neighbours dies, as if by underpopulation.
@@ -81,8 +84,8 @@ void nextStateCell(int **newMatrix, int x, int y, int adjCount)
 
 int sameState(int **matrix1, int **matrix2)
 {
-    for(int x = 0 ; x < width ; x++)
-        for(int y = 0 ; y < width ; y++)
+    for(int y = 0 ; y < height ; y++)
+        for(int x = 0 ; x < width ; x++)
             if(matrix1[x][y] != matrix2[x][y])
                 return 0;
     return 1;
@@ -91,17 +94,19 @@ int sameState(int **matrix1, int **matrix2)
 void updateMap()
 {
     int **tmp = allocMap(); 
-    for(int x = 0 ; x < width ; x++)
-        for(int y = 0 ; y < width ; y++)
+    for(int y = 0 ; y < height ; y++)
+        for(int x = 0 ; x < width ; x++)
         {
             int countAdj = countLiveAdj(x, y);
-            nextStateCell(tmp, x,  y, countAdj);
+            nextStateCell(tmp, y,  x, countAdj);
         }
     if(sameState(matrix, tmp))
     {
-        printf("Game of Life finished\n");
-        printScreen();
-        sleep(5);
+        printw("Game of Life finished\nPress any key to leave.");
+        getchar();
+        endwin();
+        freeMap(matrix);
+        freeMap(tmp);
         exit(0);
     }
     freeMap(matrix);
