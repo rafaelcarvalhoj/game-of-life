@@ -50,7 +50,7 @@ void processInput(FILE* input_path)
             {
                 if (content[y][x] == '*')
                 {
-                    matrix[startWidth + y][startHeight + x] = 1;
+                    matrix[startWidth + x][startHeight + y] = 1;
                 }
             }
         }
